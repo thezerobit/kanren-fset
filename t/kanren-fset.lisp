@@ -13,6 +13,8 @@
 
 (plan nil)
 
+;; fset:seq tests, mostly stolen from cl-kanren-trs tests
+
 (is (run nil (q)
       (== q (fset:seq)))
     (list (fset:seq))
@@ -63,12 +65,28 @@
 
 ;; 1.55
 (is (run nil (r)
-    (fresh (x y)
-      (conde ((== 'split x) (== 'pea y))
-            ((== 'navy x) (== 'bean y))
-            (else +fail+))
-      (== (fset:seq x y 'soup) r)))
-  (list (fset:seq 'split 'pea 'soup) (fset:seq 'navy 'bean 'soup))
-  :test #'fset:equal?)
+      (fresh (x y)
+        (conde ((== 'split x) (== 'pea y))
+               ((== 'navy x) (== 'bean y))
+               (else +fail+))
+        (== (fset:seq x y 'soup) r)))
+    (list (fset:seq 'split 'pea 'soup) (fset:seq 'navy 'bean 'soup))
+    :test #'fset:equal?)
+
+;; fset:map tests
+
+(is (run nil (q)
+      (fresh (x)
+        (== (fset:map (:a x)) (fset:map (:a 200)))
+        (== q (fset:map (:b 100) (:c x)))))
+    (list (fset:map (:b 100) (:c 200)))
+    :test #'fset:equal?)
+
+(is (run nil (q)
+      (fresh (x)
+        (== (fset:map (:a x)) (fset:map (:a 200)))
+        (== (fset:map (:b 110) (:c q)) (fset:map (:b 100) (:c x)))))
+    (list)
+    :test #'fset:equal?)
 
 (finalize)

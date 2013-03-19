@@ -2,7 +2,8 @@
 
 Implementation of unification methods to allow Fset collections to
 operate with cl-kanren-trs (Common Lisp port of miniKanren). Currently
-only supports the "SEQ" type (ordered collection).
+supports the fset:seq type (ordered collection) and fset:map type
+(hash map).
 
 ## Usage
 
@@ -16,6 +17,13 @@ only supports the "SEQ" type (ordered collection).
     (== q (fset:seq x 20))))
 
 ;; -> (#[ 10 20 ])
+
+(run nil (q)
+      (fresh (x)
+        (== (fset:map (:a x)) (fset:map (:a 200)))
+        (== q (fset:map (:b 100) (:c x)))))
+
+;; -> (#{| (:B 100) (:C 200) |})
 ```
 
 ## Installation
